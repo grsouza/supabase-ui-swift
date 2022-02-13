@@ -11,6 +11,7 @@
 		182FEA4627B94B3200F0F7EC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182FEA4527B94B3200F0F7EC /* ContentView.swift */; };
 		182FEA4827B94B3300F0F7EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 182FEA4727B94B3300F0F7EC /* Assets.xcassets */; };
 		182FEA4B27B94B3300F0F7EC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 182FEA4A27B94B3300F0F7EC /* Preview Assets.xcassets */; };
+		18836FC327B94C1E00D1BF97 /* SupabaseUI in Frameworks */ = {isa = PBXBuildFile; productRef = 18836FC227B94C1E00D1BF97 /* SupabaseUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18836FC327B94C1E00D1BF97 /* SupabaseUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -39,6 +41,7 @@
 				182FEA5127B94B4F00F0F7EC /* supabase-ui-swift */,
 				182FEA4227B94B3200F0F7EC /* Example */,
 				182FEA4127B94B3200F0F7EC /* Products */,
+				18836FC127B94C1E00D1BF97 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -69,6 +72,13 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		18836FC127B94C1E00D1BF97 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -85,6 +95,9 @@
 			dependencies = (
 			);
 			name = Example;
+			packageProductDependencies = (
+				18836FC227B94C1E00D1BF97 /* SupabaseUI */,
+			);
 			productName = Example;
 			productReference = 182FEA4027B94B3200F0F7EC /* Example.app */;
 			productType = "com.apple.product-type.application";
@@ -343,6 +356,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		18836FC227B94C1E00D1BF97 /* SupabaseUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SupabaseUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 182FEA3827B94B3200F0F7EC /* Project object */;
 }

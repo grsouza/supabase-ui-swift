@@ -5,13 +5,23 @@
 //  Created by Guilherme Souza on 13/02/22.
 //
 
+import Supabase
+import SupabaseUI
 import SwiftUI
 
 @main
 struct ExampleApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+
+  let supabase: SupabaseClient
+
+  init() {
+    supabase = SupabaseClient(host: "localhost:3000", supabaseKey: "key")
+  }
+
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
+        .environment(\.supabase, supabase)
     }
+  }
 }

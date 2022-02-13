@@ -8,7 +8,7 @@ let package = Package(
   products: [
     .library(
       name: "SupabaseUI",
-      targets: ["AuthUI"]
+      targets: ["SupabaseUI", "AuthUI"]
     ),
     .library(name: "AuthUI", targets: ["AuthUI"]),
   ],
@@ -16,9 +16,10 @@ let package = Package(
     .package(name: "Supabase", url: "https://github.com/grsouza/supabase-swift", .branch("master"))
   ],
   targets: [
+    .target(name: "SupabaseUI", dependencies: ["Supabase"]),
     .target(
       name: "AuthUI",
-      dependencies: ["Supabase"]
-    )
+      dependencies: ["Supabase", "SupabaseUI"]
+    ),
   ]
 )
