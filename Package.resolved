@@ -1,0 +1,61 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "ComposableKeychain",
+        "repositoryURL": "https://github.com/grsouza/composable-keychain",
+        "state": {
+          "branch": null,
+          "revision": "3ebddfe9e9232218bada99ab6d6b3ca1fd94f112",
+          "version": "0.0.2"
+        }
+      },
+      {
+        "package": "Get",
+        "repositoryURL": "https://github.com/kean/Get",
+        "state": {
+          "branch": null,
+          "revision": "068b400e3850f0953ec25d11d3a3893c4538ffd5",
+          "version": "0.5.0"
+        }
+      },
+      {
+        "package": "GoTrue",
+        "repositoryURL": "https://github.com/grsouza/gotrue-swift",
+        "state": {
+          "branch": "main",
+          "revision": "2d49accc6ddc55627b989ccba3ae07cabd92e7bf",
+          "version": null
+        }
+      },
+      {
+        "package": "KeychainAccess",
+        "repositoryURL": "https://github.com/kishikawakatsumi/KeychainAccess",
+        "state": {
+          "branch": null,
+          "revision": "84e546727d66f1adc5439debad16270d0fdd04e7",
+          "version": "4.2.2"
+        }
+      },
+      {
+        "package": "Supabase",
+        "repositoryURL": "https://github.com/grsouza/supabase-swift",
+        "state": {
+          "branch": "master",
+          "revision": "b7dcfc9cd4a7502cfc09b630d2d56649c08d1b49",
+          "version": null
+        }
+      },
+      {
+        "package": "xctest-dynamic-overlay",
+        "repositoryURL": "https://github.com/pointfreeco/xctest-dynamic-overlay",
+        "state": {
+          "branch": null,
+          "revision": "50a70a9d3583fe228ce672e8923010c8df2deddd",
+          "version": "0.2.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
