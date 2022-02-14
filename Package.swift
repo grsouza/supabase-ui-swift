@@ -13,13 +13,26 @@ let package = Package(
     .library(name: "AuthUI", targets: ["AuthUI"]),
   ],
   dependencies: [
-    .package(name: "Supabase", url: "https://github.com/grsouza/supabase-swift", .branch("master"))
+    .package(
+      name: "AsyncCompatibilityKit",
+      url: "https://github.com/JohnSundell/AsyncCompatibilityKit",
+      from: "0.1.2"
+    ),
+    .package(
+      name: "Supabase",
+      url: "https://github.com/grsouza/supabase-swift",
+      .branch("master")
+    ),
   ],
   targets: [
     .target(name: "SupabaseUI", dependencies: ["Supabase"]),
     .target(
       name: "AuthUI",
-      dependencies: ["Supabase", "SupabaseUI"]
+      dependencies: [
+        "AsyncCompatibilityKit",
+        "Supabase",
+        "SupabaseUI",
+      ]
     ),
   ]
 )

@@ -1,25 +1,46 @@
+import AsyncCompatibilityKit
+import GoTrue
 import Supabase
 import SupabaseUI
 import SwiftUI
 
-public struct AuthView: View {
+public struct AuthView<AuthenticatedContent: View>: View {
 
   let magicLinkEnabled: Bool
+  let authenticatedContent: () -> AuthenticatedContent
 
   @Environment(\.supabase) var supabase
+  @State private var authEvent: AuthChangeEvent?
 
-  public init(magicLinkEnabled: Bool = true) {
+  public init(
+    magicLinkEnabled: Bool = true,
+    @ViewBuilder authenticatedContent: @escaping () -> AuthenticatedContent
+  ) {
     self.magicLinkEnabled = magicLinkEnabled
+    self.authenticatedContent = authenticatedContent
   }
 
-  @ViewBuilder
   public var body: some View {
-    if let session = supabase.auth.session {
-      ScrollView(.vertical) {
-        Text(session.jsonFormatted())
+    Group {
+      switch authEvent {
+      case .none:
+        if #available(iOS 14.0, *) {
+          ProgressView()
+        } else {
+          Text("Loading...")
+        }
+      case .signedIn:
+        authenticatedContent()
+      case .signedOut, .userUpdated, .userDeleted, .passwordRecovery:
+        SignInOrSignUpView(magicLinkEnabled: magicLinkEnabled)
       }
-    } else {
-      SignInOrSignUpView(magicLinkEnabled: magicLinkEnabled)
+    }
+    .task {
+      for await authEventChange in supabase.auth.authEventChange.values {
+        withAnimation {
+          self.authEvent = authEventChange.event
+        }
+      }
     }
   }
 }
@@ -112,7 +133,7 @@ struct SignInOrSignUpView: View {
         }
       }
       if let error = error {
-        Text(error.localizedDescription).foregroundColor(.red)
+        Text(error.localizedDescription).foregroundColor(.red).multilineTextAlignment(.center)
       }
     }
     .padding(20)
@@ -190,19 +211,10 @@ struct SignInOrSignUpView: View {
   }
 }
 
-extension Encodable {
-  func jsonFormatted() -> String {
-    let encoder = JSONEncoder()
-    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-    let data = try! JSONEncoder().encode(self)
-    return String(data: data, encoding: .utf8)!
-  }
-}
-
 #if DEBUG
   struct AuthView_Preview: PreviewProvider {
     static var previews: some View {
-      AuthView()
+      AuthView { Text("Preview") }
     }
   }
 #endif

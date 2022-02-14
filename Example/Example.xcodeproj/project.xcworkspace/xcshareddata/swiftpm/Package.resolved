@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "AsyncCompatibilityKit",
+        "repositoryURL": "https://github.com/JohnSundell/AsyncCompatibilityKit",
+        "state": {
+          "branch": null,
+          "revision": "c69c367042586a55977407bbca548f6867640bd5",
+          "version": "0.1.2"
+        }
+      },
+      {
         "package": "ComposableKeychain",
         "repositoryURL": "https://github.com/grsouza/composable-keychain",
         "state": {
@@ -24,7 +33,7 @@
         "repositoryURL": "https://github.com/grsouza/gotrue-swift",
         "state": {
           "branch": "main",
-          "revision": "2d49accc6ddc55627b989ccba3ae07cabd92e7bf",
+          "revision": "f2e10a85484d3decaeffc3f20b90ff3679eb8a19",
           "version": null
         }
       },
