@@ -28,7 +28,7 @@ struct SignInOrSignUpView: View {
   @Environment(\.supabase) var supabase
 
   enum Mode {
-    case signIn, signUp, magicLink
+    case signIn, signUp, magicLink, forgotPassword
   }
 
   let magicLinkEnabled: Bool
@@ -44,11 +44,20 @@ struct SignInOrSignUpView: View {
     VStack(spacing: 20) {
       emailTextField
 
-      if mode != .magicLink {
+      if mode == .signIn || mode == .signUp {
         passwordTextField
       }
 
       VStack(spacing: 12) {
+        if mode == .signIn {
+          HStack {
+            Spacer()
+            Button("Forgot your password?") {
+              withAnimation { mode = .forgotPassword }
+            }
+          }
+        }
+
         Button(action: primaryActionTapped) {
           HStack(spacing: 8) {
             if isLoading {
@@ -70,13 +79,23 @@ struct SignInOrSignUpView: View {
         }
         .disabled(isLoading)
 
+        if mode == .forgotPassword {
+          HStack {
+            Button("Go back to sign in") {
+              withAnimation { mode = .signIn }
+            }
+
+            Spacer()
+          }
+        }
+
         if magicLinkEnabled, mode == .signIn {
           Button("Sign in with magic link") {
             withAnimation { mode = .magicLink }
           }
         }
 
-        if mode != .magicLink {
+        if mode == .signIn || mode == .signUp {
           Button(
             mode == .signIn
               ? "Don't have an account? Sign up"
@@ -131,6 +150,7 @@ struct SignInOrSignUpView: View {
     case .signIn: return "Sign in"
     case .signUp: return "Sign up"
     case .magicLink: return "Send magic link"
+    case .forgotPassword: return "Send reset password instructions"
     }
   }
 
