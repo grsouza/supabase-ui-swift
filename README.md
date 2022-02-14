@@ -1,3 +1,3 @@
 # SupabaseUI
 
-A description of this package.
+A UI component library for Supabase built in SwiftUI. 
