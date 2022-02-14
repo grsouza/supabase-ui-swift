@@ -37,8 +37,8 @@ struct SignInOrSignUpView: View {
   @State var password = ""
 
   @State var mode: Mode = .signIn
-
   @State var isLoading = false
+  @State var error: Error?
 
   var body: some View {
     VStack(spacing: 20) {
@@ -111,6 +111,9 @@ struct SignInOrSignUpView: View {
           }
         }
       }
+      if let error = error {
+        Text(error.localizedDescription).foregroundColor(.red)
+      }
     }
     .padding(20)
   }
@@ -121,6 +124,10 @@ struct SignInOrSignUpView: View {
       HStack {
         Image(systemName: "envelope")
         TextField("", text: $email)
+          .keyboardType(.emailAddress)
+          .textContentType(.emailAddress)
+          .autocapitalization(.none)
+          .disableAutocorrection(true)
       }
       .padding()
       .background(
@@ -136,6 +143,9 @@ struct SignInOrSignUpView: View {
       HStack {
         Image(systemName: "key")
         SecureField("", text: $password)
+          .textContentType(.password)
+          .autocapitalization(.none)
+          .disableAutocorrection(true)
       }
       .padding()
       .background(
@@ -156,12 +166,25 @@ struct SignInOrSignUpView: View {
 
   private func primaryActionTapped() {
     Task {
-      if mode == .signIn {
-        isLoading = true
-        defer { isLoading = false }
-        _ = try await supabase.auth.signIn(email: email, password: password)
-      } else {
-        fatalError("Not supported.")
+      isLoading = true
+      defer { isLoading = false }
+
+      do {
+        switch mode {
+        case .signIn:
+          _ = try await supabase.auth.signIn(email: email, password: password)
+        case .signUp:
+          fatalError("Not supported")
+        case .magicLink:
+          fatalError("Not supported")
+        //            try await supabase.auth.signIn(email: email)
+        case .forgotPassword:
+          fatalError("Not supported")
+        }
+      } catch {
+        withAnimation {
+          self.error = error
+        }
       }
     }
   }
