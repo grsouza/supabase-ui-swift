@@ -4,41 +4,42 @@ import Supabase
 import SupabaseUI
 import SwiftUI
 
-public struct AuthView<AuthenticatedContent: View>: View {
+public struct AuthView<AuthenticatedContent: View, LoadingContent: View>: View {
 
   let magicLinkEnabled: Bool
-  let authenticatedContent: () -> AuthenticatedContent
+  let loadingContent: () -> LoadingContent
+  let authenticatedContent: (Session) -> AuthenticatedContent
 
   @Environment(\.supabase) var supabase
-  @State private var authEvent: AuthChangeEvent?
+  @State private var authEvent: (event: AuthChangeEvent, session: Session?)?
 
   public init(
     magicLinkEnabled: Bool = true,
-    @ViewBuilder authenticatedContent: @escaping () -> AuthenticatedContent
+    @ViewBuilder loadingContent: @escaping () -> LoadingContent,
+    @ViewBuilder authenticatedContent: @escaping (Session) -> AuthenticatedContent
   ) {
     self.magicLinkEnabled = magicLinkEnabled
+    self.loadingContent = loadingContent
     self.authenticatedContent = authenticatedContent
   }
 
   public var body: some View {
     Group {
-      switch authEvent {
-      case .none:
-        if #available(iOS 14.0, *) {
-          ProgressView()
+      if let authEvent = authEvent {
+        if let session = authEvent.session, authEvent.event == .signedIn {
+          authenticatedContent(session)
+            .environment(\.session, session)
         } else {
-          Text("Loading...")
+          SignInOrSignUpView(magicLinkEnabled: magicLinkEnabled)
         }
-      case .signedIn:
-        authenticatedContent()
-      case .signedOut, .userUpdated, .userDeleted, .passwordRecovery:
-        SignInOrSignUpView(magicLinkEnabled: magicLinkEnabled)
+      } else {
+        loadingContent()
       }
     }
     .task {
       for await authEventChange in supabase.auth.authEventChange.values {
         withAnimation {
-          self.authEvent = authEventChange.event
+          self.authEvent = authEventChange
         }
       }
     }
@@ -211,10 +212,21 @@ struct SignInOrSignUpView: View {
   }
 }
 
+@ViewBuilder
+func LoadingView() -> some View {
+  if #available(iOS 14.0, *) {
+    ProgressView()
+  } else {
+    Text("Loading...")
+  }
+}
+
 #if DEBUG
   struct AuthView_Preview: PreviewProvider {
     static var previews: some View {
-      AuthView { Text("Preview") }
+      AuthView(loadingContent: LoadingView) { session in
+        Text("Preview")
+      }
     }
   }
 #endif

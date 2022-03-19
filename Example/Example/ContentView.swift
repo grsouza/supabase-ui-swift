@@ -10,9 +10,9 @@ import SwiftUI
 
 struct ContentView: View {
   var body: some View {
-    AuthView {
+    AuthView(loadingContent: ProgressView.init) { session in
       ScrollView(.vertical) {
-        Text("Hello")
+        Text(session.jsonFormatted())
       }
     }
   }
