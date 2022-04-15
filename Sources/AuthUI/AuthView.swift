@@ -1,4 +1,3 @@
-import AsyncCompatibilityKit
 import GoTrue
 import Supabase
 import SupabaseUI
@@ -11,7 +10,7 @@ public struct AuthView<AuthenticatedContent: View, LoadingContent: View>: View {
   let authenticatedContent: (Session) -> AuthenticatedContent
 
   @Environment(\.supabase) var supabase
-  @State private var authEvent: (event: AuthChangeEvent, session: Session?)?
+  @State private var authEvent: AuthChangeEvent?
 
   public init(
     magicLinkEnabled: Bool = true,
@@ -25,15 +24,13 @@ public struct AuthView<AuthenticatedContent: View, LoadingContent: View>: View {
 
   public var body: some View {
     Group {
-      if let authEvent = authEvent {
-        if let session = authEvent.session, authEvent.event == .signedIn {
-          authenticatedContent(session)
-            .environment(\.session, session)
-        } else {
-          SignInOrSignUpView(magicLinkEnabled: magicLinkEnabled)
-        }
-      } else {
+      switch (authEvent, supabase.auth.session) {
+      case (.signedIn, let session?):
+        authenticatedContent(session)
+      case (nil, _):
         loadingContent()
+      default:
+        SignInOrSignUpView(magicLinkEnabled: magicLinkEnabled)
       }
     }
     .task {
@@ -198,12 +195,17 @@ struct SignInOrSignUpView: View {
         case .signUp:
           fatalError("Not supported")
         case .magicLink:
-          fatalError("Not supported")
-        //            try await supabase.auth.signIn(email: email)
+          try await supabase.auth.signIn(email: email)
         case .forgotPassword:
           fatalError("Not supported")
         }
       } catch {
+        NSLog(
+          "Error on %@: %@",
+          String(describing: mode),
+          error.localizedDescription
+        )
+
         withAnimation {
           self.error = error
         }

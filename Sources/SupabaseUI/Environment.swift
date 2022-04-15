@@ -3,7 +3,10 @@ import Supabase
 import SwiftUI
 
 private enum SupabaseClientEnvironmentKey: EnvironmentKey {
-  static var defaultValue = SupabaseClient(host: "", supabaseKey: "")
+  static var defaultValue = SupabaseClient(
+    supabaseURL: URL(string: "https://supabase.com")!,
+    supabaseKey: ""
+  )
 }
 
 extension EnvironmentValues {

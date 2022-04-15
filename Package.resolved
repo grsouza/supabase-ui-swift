@@ -2,12 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "ComposableKeychain",
-        "repositoryURL": "https://github.com/grsouza/composable-keychain",
+        "package": "AnyCodable",
+        "repositoryURL": "https://github.com/Flight-School/AnyCodable",
         "state": {
           "branch": null,
-          "revision": "3ebddfe9e9232218bada99ab6d6b3ca1fd94f112",
-          "version": "0.0.2"
+          "revision": "22f302d4c048aafcda09a4ab5b8c0b03855316fb",
+          "version": "0.6.3"
         }
       },
       {
@@ -15,16 +15,16 @@
         "repositoryURL": "https://github.com/kean/Get",
         "state": {
           "branch": null,
-          "revision": "068b400e3850f0953ec25d11d3a3893c4538ffd5",
-          "version": "0.5.0"
+          "revision": "38d21f68a79b08d0eb083f0690620658ffe3b159",
+          "version": "0.7.1"
         }
       },
       {
         "package": "GoTrue",
-        "repositoryURL": "https://github.com/grsouza/gotrue-swift",
+        "repositoryURL": "https://github.com/supabase-community/gotrue-swift.git",
         "state": {
-          "branch": "main",
-          "revision": "2d49accc6ddc55627b989ccba3ae07cabd92e7bf",
+          "branch": "concurrency",
+          "revision": "0655c502fbf923addd236aadd5c1b9318eacd603",
           "version": null
         }
       },
@@ -38,12 +38,75 @@
         }
       },
       {
-        "package": "Supabase",
-        "repositoryURL": "https://github.com/grsouza/supabase-swift",
+        "package": "PostgREST",
+        "repositoryURL": "https://github.com/supabase/postgrest-swift",
         "state": {
-          "branch": "master",
-          "revision": "b7dcfc9cd4a7502cfc09b630d2d56649c08d1b49",
+          "branch": null,
+          "revision": "6583648399a3ff3979d7df388a8e7ba740e14378",
+          "version": "0.0.2"
+        }
+      },
+      {
+        "package": "Realtime",
+        "repositoryURL": "https://github.com/supabase/realtime-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "2b55564e1a724ca62067b0dc76e5e69439c30b76",
+          "version": "0.0.1"
+        }
+      },
+      {
+        "package": "Starscream",
+        "repositoryURL": "https://github.com/daltoniam/Starscream.git",
+        "state": {
+          "branch": null,
+          "revision": "e6b65c6d9077ea48b4a7bdda8994a1d3c6969c8d",
+          "version": "3.1.1"
+        }
+      },
+      {
+        "package": "SupabaseStorage",
+        "repositoryURL": "https://github.com/supabase/storage-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "ecc1b8b860cc67096be241f15d370451ed93f3ae",
+          "version": "0.0.1"
+        }
+      },
+      {
+        "package": "Supabase",
+        "repositoryURL": "https://github.com/supabase-community/supabase-swift",
+        "state": {
+          "branch": "concurrency",
+          "revision": "7b7868157a51b634d33c30f4d879dd552fe81273",
           "version": null
+        }
+      },
+      {
+        "package": "ComposableKeychain",
+        "repositoryURL": "https://github.com/binaryscraping/swift-composable-keychain",
+        "state": {
+          "branch": null,
+          "revision": "3ebddfe9e9232218bada99ab6d6b3ca1fd94f112",
+          "version": "0.0.2"
+        }
+      },
+      {
+        "package": "swift-nio-zlib-support",
+        "repositoryURL": "https://github.com/apple/swift-nio-zlib-support.git",
+        "state": {
+          "branch": null,
+          "revision": "37760e9a52030bb9011972c5213c3350fa9d41fd",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "URLQueryEncoder",
+        "repositoryURL": "https://github.com/kean/URLQueryEncoder",
+        "state": {
+          "branch": null,
+          "revision": "4cc975d4d075d0e62699a796a08284e217d4ee93",
+          "version": "0.2.0"
         }
       },
       {

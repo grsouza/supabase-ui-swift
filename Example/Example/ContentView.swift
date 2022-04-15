@@ -10,9 +10,11 @@ import SwiftUI
 
 struct ContentView: View {
   var body: some View {
-    AuthView(loadingContent: ProgressView.init) { session in
-      ScrollView(.vertical) {
-        Text(session.jsonFormatted())
+    UserProviderView {
+      AuthView(loadingContent: ProgressView.init) { session in
+        ScrollView(.vertical) {
+          Text(session.jsonFormatted())
+        }
       }
     }
   }
@@ -28,7 +30,7 @@ extension Encodable {
   func jsonFormatted() -> String {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-    let data = try! JSONEncoder().encode(self)
+    let data = try! encoder.encode(self)
     return String(data: data, encoding: .utf8)!
   }
 }

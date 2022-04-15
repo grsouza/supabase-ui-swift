@@ -4,7 +4,10 @@ import PackageDescription
 
 let package = Package(
   name: "SupabaseUI",
-  platforms: [.iOS(.v13)],
+  platforms: [
+    .iOS(.v15),
+    .macOS(.v12),
+  ],
   products: [
     .library(
       name: "SupabaseUI",
@@ -14,22 +17,16 @@ let package = Package(
   ],
   dependencies: [
     .package(
-      name: "AsyncCompatibilityKit",
-      url: "https://github.com/JohnSundell/AsyncCompatibilityKit",
-      from: "0.1.2"
-    ),
-    .package(
       name: "Supabase",
-      url: "https://github.com/grsouza/supabase-swift",
-      .branch("master")
-    ),
+      url: "https://github.com/supabase-community/supabase-swift",
+      branch: "concurrency"
+    )
   ],
   targets: [
     .target(name: "SupabaseUI", dependencies: ["Supabase"]),
     .target(
       name: "AuthUI",
       dependencies: [
-        "AsyncCompatibilityKit",
         "Supabase",
         "SupabaseUI",
       ]

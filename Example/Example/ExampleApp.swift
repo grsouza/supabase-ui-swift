@@ -15,7 +15,10 @@ struct ExampleApp: App {
   let supabase: SupabaseClient
 
   init() {
-    supabase = SupabaseClient(host: "localhost:3000", supabaseKey: "key")
+    supabase = SupabaseClient(
+      supabaseURL: URL(string: "https://localhost:3000")!,
+      supabaseKey: "key"
+    )
   }
 
   var body: some Scene {
