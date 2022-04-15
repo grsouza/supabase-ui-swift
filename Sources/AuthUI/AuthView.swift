@@ -33,6 +33,9 @@ public struct AuthView<AuthenticatedContent: View, LoadingContent: View>: View {
         SignInOrSignUpView(magicLinkEnabled: magicLinkEnabled)
       }
     }
+    .onOpenURL { url in
+      Task { _ = try await supabase.auth.session(from: url) }
+    }
     .task {
       for await authEventChange in supabase.auth.authEventChange.values {
         withAnimation {
@@ -46,6 +49,19 @@ public struct AuthView<AuthenticatedContent: View, LoadingContent: View>: View {
 struct SignInOrSignUpView: View {
   @Environment(\.supabase) var supabase
 
+  enum ResultStatus {
+    case idle
+    case loading
+    case result(Result<Void, Error>)
+
+    var isLoading: Bool {
+      if case .loading = self {
+        return true
+      }
+      return false
+    }
+  }
+
   enum Mode {
     case signIn, signUp, magicLink, forgotPassword
   }
@@ -56,8 +72,7 @@ struct SignInOrSignUpView: View {
   @State var password = ""
 
   @State var mode: Mode = .signIn
-  @State var isLoading = false
-  @State var error: Error?
+  @State var status = ResultStatus.idle
 
   var body: some View {
     VStack(spacing: 20) {
@@ -79,7 +94,7 @@ struct SignInOrSignUpView: View {
 
         Button(action: primaryActionTapped) {
           HStack(spacing: 8) {
-            if isLoading {
+            if status.isLoading {
               if #available(iOS 14.0, *) {
                 ProgressView()
               } else {
@@ -96,7 +111,7 @@ struct SignInOrSignUpView: View {
             RoundedRectangle(cornerRadius: 6, style: .continuous)
           )
         }
-        .disabled(isLoading)
+        .disabled(status.isLoading)
 
         if mode == .forgotPassword {
           HStack {
@@ -130,7 +145,7 @@ struct SignInOrSignUpView: View {
           }
         }
       }
-      if let error = error {
+      if case let .result(.failure(error)) = status {
         Text(error.localizedDescription).foregroundColor(.red).multilineTextAlignment(.center)
       }
     }
@@ -185,20 +200,20 @@ struct SignInOrSignUpView: View {
 
   private func primaryActionTapped() {
     Task {
-      isLoading = true
-      defer { isLoading = false }
+      status = .loading
 
       do {
         switch mode {
         case .signIn:
           _ = try await supabase.auth.signIn(email: email, password: password)
         case .signUp:
-          fatalError("Not supported")
+          _ = try await supabase.auth.signUp(email: email, password: password)
         case .magicLink:
           try await supabase.auth.signIn(email: email)
         case .forgotPassword:
           fatalError("Not supported")
         }
+        status = .result(.success(()))
       } catch {
         NSLog(
           "Error on %@: %@",
@@ -207,7 +222,7 @@ struct SignInOrSignUpView: View {
         )
 
         withAnimation {
-          self.error = error
+          status = .result(.failure(error))
         }
       }
     }
