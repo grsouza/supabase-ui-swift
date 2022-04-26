@@ -11,20 +11,15 @@ import SwiftUI
 
 @main
 struct ExampleApp: App {
-
-  let supabase: SupabaseClient
-
-  init() {
-    supabase = SupabaseClient(
-      supabaseURL: URL(string: "https://localhost:3000")!,
-      supabaseKey: "key"
-    )
-  }
-
   var body: some Scene {
     WindowGroup {
       ContentView()
-        .environment(\.supabase, supabase)
     }
   }
 }
+
+let supabase = SupabaseClient(
+  supabaseURL: URL(string: "https://ywlwyobfgvfsmkdvkxds.supabase.co")!,
+  supabaseKey:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNjQzMDU0ODQyLCJleHAiOjE5NTg2MzA4NDJ9.vnue-Ur8347d8W2sZj6fFqIOEHU-4E8yGEtlU-tCW-g"
+)

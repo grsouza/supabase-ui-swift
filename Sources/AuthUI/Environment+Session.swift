@@ -1,4 +1,5 @@
 import GoTrue
+import Supabase
 import SupabaseUI
 import SwiftUI
 
@@ -20,13 +21,16 @@ extension View {
 }
 
 public struct UserProviderView<RootView: View>: View {
-  @Environment(\.supabase) var supabase
-
+  let supabaseClient: SupabaseClient
   let rootView: () -> RootView
 
   @State private var user: User?
 
-  public init(@ViewBuilder rootView: @escaping () -> RootView) {
+  public init(
+    supabaseClient: SupabaseClient,
+    @ViewBuilder rootView: @escaping () -> RootView
+  ) {
+    self.supabaseClient = supabaseClient
     self.rootView = rootView
   }
 
@@ -34,11 +38,11 @@ public struct UserProviderView<RootView: View>: View {
     rootView()
       .withUser(user)
       .task {
-        let session = supabase.auth.session
+        let session = supabaseClient.auth.session
         user = session?.user
 
-        for await _ in supabase.auth.authEventChange.values {
-          user = supabase.auth.session?.user
+        for await _ in supabaseClient.auth.authEventChange.values {
+          user = supabaseClient.auth.session?.user
         }
       }
   }

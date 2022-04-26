@@ -20,7 +20,7 @@ let package = Package(
       name: "Supabase",
       url: "https://github.com/supabase-community/supabase-swift",
       branch: "concurrency"
-    ),
+    )
   ],
   targets: [
     .target(

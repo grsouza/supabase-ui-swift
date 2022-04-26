@@ -5,18 +5,20 @@ import SwiftUI
 
 public struct AuthView<AuthenticatedContent: View, LoadingContent: View>: View {
 
-  let magicLinkEnabled: Bool
-  let loadingContent: () -> LoadingContent
-  let authenticatedContent: (Session) -> AuthenticatedContent
+  private let supabaseClient: SupabaseClient
+  private let magicLinkEnabled: Bool
+  private let loadingContent: () -> LoadingContent
+  private let authenticatedContent: (Session) -> AuthenticatedContent
 
-  @Environment(\.supabase) var supabase
   @State private var authEvent: AuthChangeEvent?
 
   public init(
+    supabaseClient: SupabaseClient,
     magicLinkEnabled: Bool = true,
     @ViewBuilder loadingContent: @escaping () -> LoadingContent,
     @ViewBuilder authenticatedContent: @escaping (Session) -> AuthenticatedContent
   ) {
+    self.supabaseClient = supabaseClient
     self.magicLinkEnabled = magicLinkEnabled
     self.loadingContent = loadingContent
     self.authenticatedContent = authenticatedContent
@@ -24,20 +26,23 @@ public struct AuthView<AuthenticatedContent: View, LoadingContent: View>: View {
 
   public var body: some View {
     Group {
-      switch (authEvent, supabase.auth.session) {
+      switch (authEvent, supabaseClient.auth.session) {
       case (.signedIn, let session?):
         authenticatedContent(session)
       case (nil, _):
         loadingContent()
       default:
-        SignInOrSignUpView(magicLinkEnabled: magicLinkEnabled)
+        SignInOrSignUpView(
+          supabaseClient: supabaseClient,
+          magicLinkEnabled: magicLinkEnabled
+        )
       }
     }
     .onOpenURL { url in
-      Task { _ = try await supabase.auth.session(from: url) }
+      Task { _ = try await supabaseClient.auth.session(from: url) }
     }
     .task {
-      for await authEventChange in supabase.auth.authEventChange.values {
+      for await authEventChange in supabaseClient.auth.authEventChange.values {
         withAnimation {
           self.authEvent = authEventChange
         }
@@ -47,7 +52,7 @@ public struct AuthView<AuthenticatedContent: View, LoadingContent: View>: View {
 }
 
 struct SignInOrSignUpView: View {
-  @Environment(\.supabase) var supabase
+  let supabaseClient: SupabaseClient
 
   enum ResultStatus {
     case idle
@@ -205,11 +210,11 @@ struct SignInOrSignUpView: View {
       do {
         switch mode {
         case .signIn:
-          _ = try await supabase.auth.signIn(email: email, password: password)
+          _ = try await supabaseClient.auth.signIn(email: email, password: password)
         case .signUp:
-          _ = try await supabase.auth.signUp(email: email, password: password)
+          _ = try await supabaseClient.auth.signUp(email: email, password: password)
         case .magicLink:
-          try await supabase.auth.signIn(email: email)
+          try await supabaseClient.auth.signIn(email: email)
         case .forgotPassword:
           fatalError("Not supported")
         }
@@ -241,7 +246,10 @@ func LoadingView() -> some View {
 #if DEBUG
   struct AuthView_Preview: PreviewProvider {
     static var previews: some View {
-      AuthView(loadingContent: LoadingView) { session in
+      AuthView(
+        supabaseClient: .init(supabaseURL: URL(fileURLWithPath: ""), supabaseKey: ""),
+        loadingContent: LoadingView
+      ) { session in
         Text("Preview")
       }
     }
